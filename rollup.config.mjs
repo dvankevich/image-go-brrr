@@ -23,7 +23,7 @@ export default {
   ],
   plugins: [
     postcss({
-      extract: 'style.css',
+      extract: 'carousel.css',
       minimize: true,
     }),
     nodeResolve(),

@@ -24,7 +24,7 @@
   "module": "dist/carousel.esm.js",
   "scripts": {
     "build": "rollup -c -w",
-    "start": "live-server",
+    "start": "live-server ./examples",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -33,8 +33,15 @@
     "@rollup/plugin-babel": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-url": "^8.0.2",
     "live-server": "^1.2.0",
     "rollup": "^4.52.5",
+    "rollup-plugin-img": "^1.1.0",
     "rollup-plugin-postcss": "^4.0.2"
+  },
+  "overrides": {
+    "braces": ">=3.0.3",
+    "micromatch": ">=4.0.2",
+    "uuid": ">=7.0.0"
   }
 }
