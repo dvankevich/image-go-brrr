@@ -15,28 +15,25 @@ class Carousel {
     this.originalCount = this.strip.children.length;
     this.setupClones();
     this.currentIndex = 1;
+    this.autoplayInterval = null;
 
     this.goToSlide(this.currentIndex, false);
 
-    this.strip.addEventListener('transitionend', () => {
-      if (this.currentIndex === this.originalCount + 1) {
-        this.currentIndex = 1;
-        this.goToSlide(this.currentIndex, false);
-        this.isTransitioning = false;
-        return;
-      }
+    this.boundTransitionEndHandler = this.handleTransitionEnd.bind(this);
+    this.boundMouseEnterHandler = this.handleMouseEnter.bind(this);
+    this.boundMouseLeaveHandler = this.handleMouseLeave.bind(this);
+    this.boundDotsClickHandler = this.handleDotsClick.bind(this);
 
-      if (this.currentIndex === 0) {
-        this.currentIndex = this.originalCount;
-        this.goToSlide(this.currentIndex, false);
-        this.isTransitioning = false;
-        return;
-      }
+    this.strip.addEventListener(
+      'transitionend',
+      this.boundTransitionEndHandler
+    );
 
-      this.isTransitioning = false;
-    });
+    this.container.addEventListener('mouseenter', this.boundMouseEnterHandler);
+    this.container.addEventListener('mouseleave', this.boundMouseLeaveHandler);
 
     this.setupDots();
+    this.startAutoplay();
   }
 
   createBlock(tagName, className) {
@@ -91,18 +88,40 @@ class Carousel {
     this.strip.style.transform = `translateX(-${100 * index}%)`;
   }
 
+  handleTransitionEnd() {
+    if (this.currentIndex === this.originalCount + 1) {
+      this.currentIndex = 1;
+      this.goToSlide(this.currentIndex, false);
+      this.isTransitioning = false;
+      return;
+    }
+
+    if (this.currentIndex === 0) {
+      this.currentIndex = this.originalCount;
+      this.goToSlide(this.currentIndex, false);
+      this.isTransitioning = false;
+      return;
+    }
+
+    this.isTransitioning = false;
+  }
+
   nextSlide() {
     if (this.isTransitioning) return;
+    this.stopAutoplay();
     this.isTransitioning = true;
     this.currentIndex++;
     this.goToSlide(this.currentIndex);
+    this.startAutoplay();
   }
 
   prevSlide() {
     if (this.isTransitioning) return;
+    this.stopAutoplay();
     this.isTransitioning = true;
     this.currentIndex--;
     this.goToSlide(this.currentIndex);
+    this.startAutoplay();
   }
 
   setupDots() {
@@ -110,24 +129,85 @@ class Carousel {
     for (let i = 0; i < this.originalCount; i++) {
       const dots = this.createBlock('button', 'dots-nav');
       dots.dataset.index = `${i}`;
+      dots.textContent = 'brr';
       dotsContainer.appendChild(dots);
     }
     this.container.appendChild(dotsContainer);
 
-    dotsContainer.addEventListener('click', (e) => {
-      if (e.target.classList.contains('dots-nav')) {
-        if (this.isTransitioning) return;
+    this.dotsContainer = dotsContainer;
+    dotsContainer.addEventListener('click', this.boundDotsClickHandler);
+  }
 
-        const dotIndex = parseInt(e.target.dataset.index, 10);
-        const targetIndex = dotIndex + 1;
+  handleDotsClick(e) {
+    if (e.target.classList.contains('dots-nav')) {
+      if (this.isTransitioning) return;
 
-        if (targetIndex === this.currentIndex) return;
+      const dotIndex = parseInt(e.target.dataset.index, 10);
+      const targetIndex = dotIndex + 1;
 
-        this.isTransitioning = true;
-        this.currentIndex = targetIndex;
-        this.goToSlide(this.currentIndex);
-      }
-    });
+      if (targetIndex === this.currentIndex) return;
+
+      this.stopAutoplay();
+      this.isTransitioning = true;
+      this.currentIndex = targetIndex;
+      this.goToSlide(this.currentIndex);
+      this.startAutoplay();
+    }
+  }
+
+  startAutoplay() {
+    this.autoplayInterval = setInterval(() => {
+      this.nextSlide();
+    }, 2000);
+  }
+
+  stopAutoplay() {
+    if (this.autoplayInterval !== null) {
+      clearInterval(this.autoplayInterval);
+      this.autoplayInterval = null;
+    }
+  }
+
+  handleMouseEnter() {
+    this.stopAutoplay();
+  }
+
+  handleMouseLeave() {
+    this.startAutoplay();
+  }
+
+  destroy() {
+    this.stopAutoplay();
+
+    if (this.strip && this.boundTransitionEndHandler) {
+      this.strip.removeEventListener(
+        'transitionend',
+        this.boundTransitionEndHandler
+      );
+    }
+
+    if (this.container) {
+      this.container.removeEventListener(
+        'mouseenter',
+        this.boundMouseEnterHandler
+      );
+      this.container.removeEventListener(
+        'mouseleave',
+        this.boundMouseLeaveHandler
+      );
+    }
+
+    if (this.dotsContainer && this.boundDotsClickHandler) {
+      this.dotsContainer.removeEventListener(
+        'click',
+        this.boundDotsClickHandler
+      );
+    }
+
+    this.container = null;
+    this.strip = null;
+    this.frame = null;
+    this.dotsContainer = null;
   }
 }
 
