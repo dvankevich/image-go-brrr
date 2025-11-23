@@ -156,6 +156,10 @@ class Carousel {
   }
 
   startAutoplay() {
+    if (this.autoplayInterval !== null){
+      return
+    }
+
     this.autoplayInterval = setInterval(() => {
       this.nextSlide();
     }, 2000);
