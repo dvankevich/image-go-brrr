@@ -6,11 +6,11 @@ Status: In active development. Not ready for production use.
 
 ## Features
 
-* Zero Dependencies: No jQuery or other unnecessary libraries. Pure JavaScript.
-* Responsive: Adapts to any screen size, from mobile to TV.
-* Swipe/Touch Support: Swipe through slides on touch devices.
-* Full Customization: Easily customizable via CSS and JS options.
-* Accessible: Supports keyboard navigation (WCAG).
+- Zero Dependencies: No jQuery or other unnecessary libraries. Pure JavaScript.
+- Responsive: Adapts to any screen size, from mobile to TV.
+- Swipe/Touch Support: Swipe through slides on touch devices.
+- Full Customization: Easily customizable via CSS and JS options.
+- Accessible: Supports keyboard navigation (WCAG).
 
 ## Installation
 
@@ -38,3 +38,39 @@ import Carousel from '@ligect/image-carousel';
 const myCarousel = new Carousel('.carousel', {
   /* options */
 });
+```
+
+## Configuration Options
+
+| Option   | Type    | Default | Description                       |
+| -------- | ------- | ------- | --------------------------------- |
+| autoplay | boolean | true    | Enable/disable autoplay           |
+| interval | number  | 2000    | Autoplay interval in milliseconds |
+| loop     | boolean | true    | Enable/disable infinite loop      |
+
+## Examples
+
+### Default settings
+
+```javascript
+import Carousel from '@ligect/image-carousel';
+const carousel = new Carousel('#my-carousel');
+```
+
+### No autoplay
+
+```javascript
+const carousel = new Carousel('#my-carousel', { autoplay: false });
+```
+
+### No looping
+
+```javascript
+const carousel = new Carousel('#my-carousel', { loop: false });
+```
+
+### Slower autoplay
+
+```javascript
+const carousel = new Carousel('#my-carousel', { interval: 5000 });
+```

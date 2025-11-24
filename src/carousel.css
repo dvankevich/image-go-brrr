@@ -1,0 +1,19 @@
+img {
+  width: 400px;
+  height: 400px;
+  margin: 0;
+  object-fit: cover;
+}
+
+.carousel-frame {
+  width: 400px;
+  height: 400px;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-strip {
+  display: flex;
+  flex-wrap: nowrap;
+  transition: transform 0.5s ease-in-out;
+}

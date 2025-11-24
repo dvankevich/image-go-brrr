@@ -1,7 +1,7 @@
 {
   "name": "image-go-brrr",
   "version": "0.1.0",
-  "description": "An image carousel with arrows and navigation dots. Automatically advances every 5 seconds.",
+  "description": "An image carousel with arrows and navigation dots. Automatically advances every 2 seconds.",
   "keywords": [
     "carousel",
     "slider",

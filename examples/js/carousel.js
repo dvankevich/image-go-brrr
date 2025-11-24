@@ -1,12 +1,11 @@
 class Carousel {
   constructor(containerSelector, options = {}) {
-
     const defaultOptions = {
       autoplay: true,
       interval: 2000,
       loop: true,
-    }
-    this.options = {...defaultOptions, ...options}
+    };
+    this.options = { ...defaultOptions, ...options };
 
     this.container = document.querySelector(containerSelector);
 
@@ -41,8 +40,8 @@ class Carousel {
     this.container.addEventListener('mouseleave', this.boundMouseLeaveHandler);
 
     this.setupDots();
-    if(this.options.autoplay){
-      this.startAutoplay()
+    if (this.options.autoplay) {
+      this.startAutoplay();
     }
   }
 
@@ -100,26 +99,26 @@ class Carousel {
 
   handleTransitionEnd() {
     if (this.currentIndex === this.originalCount + 1) {
-    if(this.options.loop){
-       this.currentIndex = 1;
-       this.goToSlide(this.currentIndex, false);
-    } else {
-      this.currentIndex = this.originalCount;
-      this.goToSlide(this.currentIndex, false);
-      this.stopAutoplay()
-    }         
+      if (this.options.loop) {
+        this.currentIndex = 1;
+        this.goToSlide(this.currentIndex, false);
+      } else {
+        this.currentIndex = this.originalCount;
+        this.goToSlide(this.currentIndex, false);
+        this.stopAutoplay();
+      }
       this.isTransitioning = false;
       return;
     }
 
     if (this.currentIndex === 0) {
-      if(this.options.loop){
+      if (this.options.loop) {
         this.currentIndex = this.originalCount;
         this.goToSlide(this.currentIndex, false);
       } else {
-        this.currentIndex = 1
+        this.currentIndex = 1;
         this.goToSlide(this.currentIndex, false);
-        this.stopAutoplay()
+        this.stopAutoplay();
       }
       this.isTransitioning = false;
       return;
@@ -135,7 +134,7 @@ class Carousel {
     this.currentIndex++;
     this.goToSlide(this.currentIndex);
     if (this.options.autoplay) {
-    this.startAutoplay();
+      this.startAutoplay();
     }
   }
 
@@ -145,8 +144,8 @@ class Carousel {
     this.isTransitioning = true;
     this.currentIndex--;
     this.goToSlide(this.currentIndex);
-      if (this.options.autoplay) {
-    this.startAutoplay();
+    if (this.options.autoplay) {
+      this.startAutoplay();
     }
   }
 
@@ -177,15 +176,15 @@ class Carousel {
       this.isTransitioning = true;
       this.currentIndex = targetIndex;
       this.goToSlide(this.currentIndex);
-        if (this.options.autoplay) {
-    this.startAutoplay();
-  }
+      if (this.options.autoplay) {
+        this.startAutoplay();
+      }
     }
   }
 
   startAutoplay() {
-    if (this.autoplayInterval !== null){
-      return
+    if (this.autoplayInterval !== null) {
+      return;
     }
 
     this.autoplayInterval = setInterval(() => {
@@ -201,14 +200,14 @@ class Carousel {
   }
 
   handleMouseEnter() {
-     if(this.options.autoplay){
-      this.stopAutoplay()
+    if (this.options.autoplay) {
+      this.stopAutoplay();
     }
   }
 
   handleMouseLeave() {
-     if(this.options.autoplay){
-      this.startAutoplay()
+    if (this.options.autoplay) {
+      this.startAutoplay();
     }
   }
 
@@ -247,9 +246,7 @@ class Carousel {
   }
 }
 
-
 const carousel1 = new Carousel('#my-carousel');
-
 
 document.getElementById('wrapper').addEventListener('click', (e) => {
   if (e.target.closest('button')) {
