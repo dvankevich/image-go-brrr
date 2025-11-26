@@ -4,7 +4,7 @@ class Carousel {
   constructor(containerSelector, options = {}) {
     const defaultOptions = {
       autoplay: true,
-      interval: 2000,
+      interval: 3000,
       loop: true,
     };
     this.options = { ...defaultOptions, ...options };
@@ -32,6 +32,8 @@ class Carousel {
     this.boundMouseEnterHandler = this.handleMouseEnter.bind(this);
     this.boundMouseLeaveHandler = this.handleMouseLeave.bind(this);
     this.boundDotsClickHandler = this.handleDotsClick.bind(this);
+    this.boundArrowsPrevHandler = this.handlerArrowsPrev.bind(this);
+    this.boundArrowsNextHandler = this.handlerArrowsNext.bind(this);
 
     this.strip.addEventListener(
       'transitionend',
@@ -42,6 +44,7 @@ class Carousel {
     this.container.addEventListener('mouseleave', this.boundMouseLeaveHandler);
 
     this.setupDots();
+    this.setupArrows();
     if (this.options.autoplay) {
       this.startAutoplay();
     }
@@ -104,9 +107,11 @@ class Carousel {
       if (this.options.loop) {
         this.currentIndex = 1;
         this.goToSlide(this.currentIndex, false);
+        this.updateActiveDot();
       } else {
         this.currentIndex = this.originalCount;
         this.goToSlide(this.currentIndex, false);
+        this.updateActiveDot();
         this.stopAutoplay();
       }
       this.isTransitioning = false;
@@ -117,9 +122,11 @@ class Carousel {
       if (this.options.loop) {
         this.currentIndex = this.originalCount;
         this.goToSlide(this.currentIndex, false);
+        this.updateActiveDot();
       } else {
         this.currentIndex = 1;
         this.goToSlide(this.currentIndex, false);
+        this.updateActiveDot();
         this.stopAutoplay();
       }
       this.isTransitioning = false;
@@ -135,6 +142,7 @@ class Carousel {
     this.isTransitioning = true;
     this.currentIndex++;
     this.goToSlide(this.currentIndex);
+    this.updateActiveDot();
     if (this.options.autoplay) {
       this.startAutoplay();
     }
@@ -146,6 +154,7 @@ class Carousel {
     this.isTransitioning = true;
     this.currentIndex--;
     this.goToSlide(this.currentIndex);
+    this.updateActiveDot();
     if (this.options.autoplay) {
       this.startAutoplay();
     }
@@ -153,16 +162,62 @@ class Carousel {
 
   setupDots() {
     const dotsContainer = this.createBlock('div', 'carousel-dots');
+
     for (let i = 0; i < this.originalCount; i++) {
       const dots = this.createBlock('button', 'dots-nav');
       dots.dataset.index = `${i}`;
-      dots.textContent = 'brr';
       dotsContainer.appendChild(dots);
     }
     this.container.appendChild(dotsContainer);
 
     this.dotsContainer = dotsContainer;
     dotsContainer.addEventListener('click', this.boundDotsClickHandler);
+    this.updateActiveDot();
+  }
+
+  updateActiveDot() {
+    if (!this.dotsContainer) return;
+
+    const dots = this.dotsContainer.querySelectorAll('.dots-nav');
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === this.currentIndex - 1);
+    });
+  }
+
+  setupArrows() {
+    this.arrowPrev = this.createBlock(
+      'button',
+      'carousel-arrow carousel-arrow--prev'
+    );
+
+    this.arrowNext = this.createBlock(
+      'button',
+      'carousel-arrow carousel-arrow--next'
+    );
+
+    this.arrowPrev.innerHTML = `
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="15 18 9 12 15 6"></polyline>
+  </svg>`;
+
+    this.arrowNext.innerHTML = `
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>`;
+
+    this.arrowPrev.addEventListener('click', this.boundArrowsPrevHandler);
+    this.arrowNext.addEventListener('click', this.boundArrowsNextHandler);
+
+    this.container.appendChild(this.arrowPrev);
+    this.container.appendChild(this.arrowNext);
+  }
+
+  handlerArrowsPrev() {
+    this.prevSlide();
+  }
+
+  handlerArrowsNext() {
+    this.nextSlide();
   }
 
   handleDotsClick(e) {
@@ -178,6 +233,7 @@ class Carousel {
       this.isTransitioning = true;
       this.currentIndex = targetIndex;
       this.goToSlide(this.currentIndex);
+      this.updateActiveDot();
       if (this.options.autoplay) {
         this.startAutoplay();
       }
