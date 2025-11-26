@@ -24,9 +24,11 @@
   "module": "dist/carousel.esm.js",
   "scripts": {
     "build": "rollup -c",
-    "start": "live-server ./examples",
+    "build:watch": "rollup -c -w",
+    "start": "live-server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "npm run build && gh-pages -d examples"
+    "predeploy": "npm run build && cp -r dist examples/",
+    "deploy": "npm run build -d examples"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
