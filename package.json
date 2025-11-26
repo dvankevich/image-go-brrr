@@ -28,7 +28,7 @@
     "start": "live-server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "predeploy": "npm run build && cp -r dist examples/",
-    "deploy": "npm run build -d examples"
+    "deploy": "gh-pages -d examples"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
