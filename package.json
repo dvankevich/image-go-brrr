@@ -27,8 +27,8 @@
     "build:watch": "rollup -c -w",
     "start": "live-server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "predeploy": "npm run build && cp -r dist examples/",
-    "deploy": "gh-pages -d examples"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
