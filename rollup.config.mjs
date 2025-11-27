@@ -2,7 +2,6 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import babel from '@rollup/plugin-babel';
 import terser from '@rollup/plugin-terser';
 import postcss from 'rollup-plugin-postcss';
-import copy from 'rollup-plugin-copy';
 
 export default {
   input: 'src/main.js',
@@ -31,9 +30,6 @@ export default {
     babel({
       babelHelpers: 'bundled',
       exclude: 'node_modules/**',
-    }),
-    copy({
-      targets: [{ src: 'src/demo.html', dest: 'dist', rename: 'index.html' }],
-    }),
+    })
   ],
 };
