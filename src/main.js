@@ -1,4 +1,4 @@
-import './carousel.css';
+// import './carousel.css';
 
 class Carousel {
   constructor(containerSelector, options = {}) {
@@ -304,4 +304,4 @@ class Carousel {
   }
 }
 
-export default Carousel;
+// export default Carousel;
